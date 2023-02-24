@@ -1,0 +1,39 @@
+/* général */
+h1 {
+    text-align: center;
+}
+
+#filters {
+    margin: auto;
+}
+
+
+#map-restaurant-display {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+/* map */
+
+#map {
+    height: 400px;
+    width: 500px;
+}
+
+/* restaurant */
+
+#restaurants {
+    width: 200px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+    justify-content: space-around;
+}
+
+.restaurant {
+    border: 2px solid black;
+    border-radius: 5px;
+    margin-bottom: 1px;
+}
