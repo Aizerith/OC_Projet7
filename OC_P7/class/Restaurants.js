@@ -1,7 +1,7 @@
 export class Restaurants {
-    constructor(parentElt) {
+    constructor(parentElt, map) {
+        this.map = map;
         this.parentElt = parentElt;
-        this.restoList; // jsonObj ne se copie pas
     }
 
     displayRestaurants(jsonObj) {
@@ -13,6 +13,11 @@ export class Restaurants {
         });
     }
 
+    clearRestaurant()
+    {
+        this.parentElt.innerHTML = "";
+    }
+
     getAverageRating(restoRatings) {
         let averageRating = 0;
         let count = 0;
@@ -20,7 +25,7 @@ export class Restaurants {
             averageRating += element.stars;
             count++;
         });
-        averageRating = averageRating / count; // lenght fonctionne pas
+        averageRating = averageRating / count;
         return (averageRating);
     }
 }

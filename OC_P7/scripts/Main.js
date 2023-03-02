@@ -6,6 +6,7 @@ if (navigator.geolocation) {
 	navigator.geolocation.getCurrentPosition(position => {
 		let userLat = position.coords.latitude;
 		let userLong = position.coords.longitude;
+		console.log(userLat, userLong);
 		initApp(userLat, userLong, 11);
 	});
 
@@ -30,16 +31,52 @@ fetch('https://the-fork-the-spoon.p.rapidapi.com/restaurants/v2/list?queryPlaceV
 
 function initApp(userLat = 48.8737815, userLong = 2.3501649, zoom = 11){
 	let map = new Map(userLat, userLong, zoom);
-	let marker = new Marker(map.initMap(), userLat, userLong);
-	marker.showUserMarker();
-	let displayRest = new Restaurants(document.querySelector('#restaurants'));
-
-	fetch("./json/restaurant.json")
-    .then(response => response.json())
-    .then(response => marker.showRestaurantMarker(response))
-    .then(response => displayRest.displayRestaurants(response))
-	.catch(err => console.error(err));
-
-	
+	//let marker = new Marker(map, userLat, userLong);
+	let displayRest = new Restaurants(document.querySelector('#restaurants'), map);
+	map.initMap();
+	map.initMarkers(0, displayRest);
+	applyFilter(map, displayRest);
 };
 
+function applyFilter(map, displayRest) {
+
+	let minInput = document.getElementById("min-rate");
+	let maxInput = document.getElementById("max-rate");
+	let btn = document.getElementById("filterBtn");
+	btn.disabled = true;
+
+	minInput.addEventListener('input', e => {
+		e.preventDefault();
+		console.log(minInput.value, maxInput.value)
+		if (minInput.value <= maxInput.value) {
+			btn.disabled = false;
+		}
+		else {
+			btn.disabled = true;
+		}
+	});
+
+	maxInput.addEventListener('input', e => {
+		e.preventDefault();
+		console.log(minInput.value, maxInput.value)
+		if (minInput.value <= maxInput.value) {
+			btn.disabled = false;
+		}
+		else {
+			btn.disabled = true;
+		}
+	});
+
+	btn.addEventListener('click', e => {
+		e.preventDefault();
+		// récupérer les valeurs de min et de max
+		let filter = {
+			min: minInput.value,
+			max: maxInput.value
+		};
+
+		console.log(filter.min, filter.max);
+		map.clearMarkers();
+		map.initMarkers(filter, displayRest);
+	})
+}

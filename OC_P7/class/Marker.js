@@ -5,28 +5,22 @@ export class Marker {
         this.userLong = userLong;
     }
 
-    showUserMarker() {
-        let userPosIcon = L.icon({
-            iconUrl: '../images/userPos.png',
-            iconSize: [35, 40], // size of the icon
-            iconAnchor: [13, 27], // point of the icon which will correspond to marker's location
-            popupAnchor: [6, -18] // point from which the popup should open relative to the iconAnchor
-        });
-        let marker = L.marker([this.userLat, this.userLong], { icon: userPosIcon }).addTo(this.map);
-        marker.bindPopup('Votre Position');
+    createMarker(element) {
+        let marker = L.marker([element.lat, element.long]).addTo(this.map.map);
+        //let marker = L.marker([element.geo.latitude, element.geo.longitude]).addTo(map); // pour api
+        marker.bindPopup(`${element.restaurantName} <br> avis : "${element.ratings[0].comment}"`);
+        this.map.markerClusters.addLayer(marker);
     }
 
     showRestaurantMarker(jsonObj) {
-        let markerClusters = L.markerClusterGroup();
         //console.log(jsonObj.data);
         //jsonObj.data.forEach(element => { // pour api
+        console.log(jsonObj);
         jsonObj.forEach(element => {
-            let marker = L.marker([element.lat, element.long]).addTo(this.map);
-            //let marker = L.marker([element.geo.latitude, element.geo.longitude]).addTo(map); // pour api
-            marker.bindPopup(`${element.restaurantName} <br> avis : "${element.ratings[0].comment}"`);
-            markerClusters.addLayer(marker);
+            console.log(element)
+            this.createMarker(element);
         });
-        this.map.addLayer(markerClusters);
+        this.map.map.addLayer(this.map.markerClusters);
         return (jsonObj);
     }
 }
