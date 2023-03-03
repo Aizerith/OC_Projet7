@@ -24,7 +24,7 @@ input {
 
 #filterBtn {
     margin-left: 5px;
-    
+
 }
 
 /* map */
@@ -42,7 +42,7 @@ input {
     display: flex;
     flex-direction: column;
     margin-left: 5px;
-    justify-content: space-around;
+    justify-content: flex-start;
 }
 
 .restaurant {

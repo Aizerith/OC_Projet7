@@ -69,13 +69,10 @@ function applyFilter(map, displayRest) {
 
 	btn.addEventListener('click', e => {
 		e.preventDefault();
-		// récupérer les valeurs de min et de max
 		let filter = {
 			min: minInput.value,
 			max: maxInput.value
 		};
-
-		console.log(filter.min, filter.max);
 		map.clearMarkers();
 		map.initMarkers(filter, displayRest);
 	})

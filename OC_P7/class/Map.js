@@ -47,15 +47,23 @@ export class Map {
             .then(response => response.json())
             .then(response => {
                 if (filter) {
-                    response.forEach((element, index) => {
-                        const averageRating = displayRest.getAverageRating(element.ratings);
-                        console.log(element.restaurantName, averageRating);
-                        if (!(averageRating >= filter.min && averageRating <= filter.max)) {
-                            console.log(element.restaurantName, "a filtrer");
-                            response.splice(index, 1);
+                    /*let i = 0;
+                    while(i < response.length){
+                        let averageRating = displayRest.getAverageRating(response[i].ratings);
+                        console.log(averageRating);
+                        if (!(averageRating >= filter.min && averageRating<= filter.max)) {
+                            console.log(response[i].restaurantName, "à filtrer");
+                            response.splice(i, 1);
                         }
-                    });
-                }
+                        else {
+                            console.log(response[i].restaurantName, "à garder");
+                            i++;
+                        }
+                    */
+                    response = response.filter(element => displayRest.getAverageRating(element.ratings) >= filter.min
+                        && displayRest.getAverageRating(element.ratings) <= filter.max);
+                        console.log(response);
+                   }
                 return response;
             })
             .then(response => {
