@@ -8,9 +8,10 @@ export class Map {
     }
 
     initMap() {
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        L.tileLayer('https://maps.geoapify.com/v1/tile/osm-bright-grey/{z}/{x}/{y}.png?apiKey=2ef7298e24614620b7782d66e5959b74', {
+            attribution: 'Powered by <a href="https://www.geoapify.com/" target="_blank">Geoapify</a> | <a href="https://openmaptiles.org/" target="_blank">© OpenMapTiles</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap</a> contributors',
+            maxZoom: 20,
+            id: 'osm-bright'
         }).addTo(this.map);
         let userPosIcon = L.icon({
             iconUrl: '../images/userPos.png',
@@ -23,23 +24,20 @@ export class Map {
         return (this.map);
     }
 
-    createMarker(element) {
+    createMarker(element, displayRest) {
         let marker = L.marker([element.lat, element.long]).addTo(this.map);
         //let marker = L.marker([element.geo.latitude, element.geo.longitude]).addTo(map); // pour api
-        marker.bindPopup(`${element.restaurantName} <br> avis : "${element.ratings[0].comment}"`);
+        marker.bindPopup(displayRest.showComment(element));
         this.markerClusters.addLayer(marker);
     }
 
-    showRestaurantMarker(jsonObj) {
+    showRestaurantMarker(jsonObj, displayRest) {
         //console.log(jsonObj.data);
         //jsonObj.data.forEach(element => { // pour api
-        console.log(jsonObj);
         jsonObj.forEach(element => {
-            console.log(element)
-            this.createMarker(element);
+            this.createMarker(element, displayRest);
         });
         this.map.addLayer(this.markerClusters);
-        return (jsonObj);
     }
     
     initMarkers(filter = false, displayRest) {
@@ -67,9 +65,9 @@ export class Map {
                 return response;
             })
             .then(response => {
-                this.showRestaurantMarker(response)
+                this.showRestaurantMarker(response, displayRest);
                 displayRest.clearRestaurant();
-                displayRest.displayRestaurants(response)
+                displayRest.displayRestaurants(response);
             })
             .catch(err => console.error(err));
     }

@@ -13,9 +13,17 @@ export class Restaurants {
         });
     }
 
-    clearRestaurant()
-    {
+    clearRestaurant() {
         this.parentElt.innerHTML = "";
+    }
+
+    showComment(element) {
+        let comments = document.createElement('div');
+        comments.innerHTML = `${element.restaurantName} <br> avis : `
+        element.ratings.forEach(rating => {
+            comments.innerHTML += `${rating.stars}/5 "${rating.comment}"<br>`;
+        });
+        return (comments);
     }
 
     getAverageRating(restoRatings) {
