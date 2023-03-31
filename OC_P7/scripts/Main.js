@@ -1,33 +1,8 @@
 import { Map } from "../class/Map.js";
-import { Marker } from "../class/Marker.js";
-import { Restaurants } from "../class/Restaurants.js";
+import { RestaurantsPanel } from "../class/RestaurantsPanel.js";
+import { Form } from "../class/Form.js";
 
-/*if (navigator.geolocation) {
-	navigator.geolocation.getCurrentPosition(position => {
-		let userLat = position.coords.latitude;
-		let userLong = position.coords.longitude;
-		console.log(userLat, userLong);
-		initApp(userLat, userLong, 15);
-	});
-
-} else {*/
-	initApp();
-/*}*/
-/*
-const babalouPos = { lat: 48.8865035, lng: 2.3442197 }
-const panorama = new google.maps.StreetViewPanorama(
-    document.getElementById("pano-test"),
-    {
-      position: babalouPos,
-      pov: {
-        heading: 34,
-        pitch: 10,
-      },
-    }
-  );
-*/
-
-/* ====== pour api the-fork-the-spoon
+//fork and spoon api options
 const options = {
 	method: 'GET',
 	headers: {
@@ -38,106 +13,48 @@ const options = {
 
 fetch('https://the-fork-the-spoon.p.rapidapi.com/restaurants/v2/list?queryPlaceValueCityId=415144&pageSize=10&pageNumber=1&queryPlaceValueCoordinatesLatitude=48.864389&queryPlaceValueCoordinatesLongitude=2.360854', options)
 	.then(response => response.json())
-    .then(response => showRestaurantMarker(response))
+    .then(response => console.log(response))
 	.catch(err => console.error(err));
-======*/
 
-function initApp(userLat = 48.8737815, userLong = 2.3501649, zoom = 15){
-	let map = new Map(userLat, userLong, zoom);
-	//let marker = new Marker(map, userLat, userLong);
-	let displayRest = new Restaurants(document.querySelector('#restaurants'), map);
-	map.initMap();
-	map.initMarkers(0, displayRest);
-	applyFilter(map, displayRest);
-	addComment();
-};
+fetch('https://the-fork-the-spoon.p.rapidapi.com/restaurants/v2/get-info?restaurantId=650337', options)
+	.then(response => response.json())
+	.then(response => console.log(response))
+	.catch(err => console.error(err));
 
-function applyFilter(map, displayRest) {
+async function getData() {
+    let response = await fetch("./json/restaurant.json");
+    let restaurantsData = await response.json();
+    return restaurantsData;
+}
+const restaurants = await getData();
 
-	let minInput = document.getElementById("min-rate");
-	let maxInput = document.getElementById("max-rate");
-	let btn = document.getElementById("filterBtn");
-	btn.disabled = true;
-
-	minInput.addEventListener('input', e => {
-		e.preventDefault();
-		console.log(minInput.value, maxInput.value)
-		if (minInput.value <= maxInput.value) {
-			btn.disabled = false;
-		}
-		else {
-			btn.disabled = true;
-		}
-	});
-
-	maxInput.addEventListener('input', e => {
-		e.preventDefault();
-		console.log(minInput.value, maxInput.value)
-		if (minInput.value <= maxInput.value) {
-			btn.disabled = false;
-		}
-		else {
-			btn.disabled = true;
-		}
-	});
-
-	btn.addEventListener('click', e => {
-		e.preventDefault();
-		let filter = {
-			min: minInput.value,
-			max: maxInput.value
-		};
-		map.clearMarkers();
-		map.initMarkers(filter, displayRest);
+// parametre initial
+let userLat = 48.8737815;
+let userLong = 2.3501649;
+let zoom = 15;
+/*
+if (navigator.geolocation) {
+	navigator.geolocation.getCurrentPosition(position => {
+		userLat = position.coords.latitude;
+		userLong = position.coords.longitude;
+		console.log(userLat, userLong);
+		initApp(userLat, userLong, zoom, restaurants);
 	})
 }
+else {*/
+	console.log("message");
+	initApp(userLat, userLong, zoom, restaurants);
+/*}*/
 
-function addComment(){
-	let clickEvent = document.getElementById("restaurants");
-	clickEvent.addEventListener('click', e => {
-		e.preventDefault();
-		let comment = addCommentForm();
-		document.getElementById("add-comment").classList.toggle('active');
-		let restoName = e.target.getAttribute("data-restaurant");
-		fetch("./json/restaurant.json")
-		.then(response => response.json())
-		.then(response => { 
-			response.forEach(element => {
-				if(element.restaurantName == restoName){
-					element.ratings.push(comment);
-				}
-				console.log(element.ratings)
-			})
-			console.log(response);
-		})
-		});
-}
-
-function addCommentForm(){
-	let parentElt = document.getElementById("add-comment");
-	parentElt.innerHTML = `
-		<div class="modal">
-			<h2>Ajouter un avis</h2>
-			<form methode="get" class="add-comment-form">
-				<div class="comment-form">
-					<label for="stars">Note: </label>
-					<input type="number" id="stars "name="stars" min="1" max ="5" required>
-			  	</div>
-				  <div class="comment-form">
-				  <label for="comment">commentaire: </label>
-				  <input type="text" id="comment" name="comment">
-				</div>
-				<input type="submit" value="Ajouter" id="confirm-comment">
-			</form>
-		</div>
-	`
-	const form = document.querySelector("form.add-comment-form");
-	form.addEventListener('submit', e => {
-		e.preventDefault();
-		const formData = new FormData(form);
-		const comment = Object.fromEntries(formData.entries());
-		document.getElementById("add-comment").classList.toggle('active');
-		console.log(comment);
-	});
-	return comment;
-}
+function initApp(userLat, userLong, zoom, restaurants){
+	let map = new Map(userLat, userLong, zoom);
+	let restForm = new Form(map);
+	let displayRest = new RestaurantsPanel(document.querySelector('#restaurants'), map, restForm);
+ 
+	console.log(map)
+	map.initMap();
+	map.initMarkers(0, displayRest, restaurants);
+	displayRest.applyFilter(restaurants);
+	displayRest.addCommentOnRestaurant(restaurants);
+	displayRest.addRestaurant(restaurants);
+};
