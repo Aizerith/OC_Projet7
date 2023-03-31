@@ -86,6 +86,7 @@ export class Form {
             self.map.resetMarkers(restaurantList, displayRest);
             displayRest.clearRestaurant();
             displayRest.displayRestaurants(restaurantList);
+         
         });
     }
 

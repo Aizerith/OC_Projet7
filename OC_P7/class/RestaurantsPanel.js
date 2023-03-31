@@ -12,7 +12,7 @@ export class RestaurantsPanel {
         jsonObj.forEach(element => {
             this.parentElt.innerHTML += `
             <div class="restaurant">
-                <p data-restaurant=${element.restaurantName}>${element.restaurantName}<br>Average Rating: ${this.getAverageRating(element.ratings)}</p>
+                <p data-restaurant="${element.restaurantName}">${element.restaurantName}<br>Average Rating: ${this.getAverageRating(element.ratings)}</p>
             </div>`
         });
     }
@@ -92,6 +92,7 @@ export class RestaurantsPanel {
             e.preventDefault();
             document.getElementById("add-comment").classList.toggle('active');
             let restaurantName = e.target.getAttribute("data-restaurant");
+            console.log(restaurantName)
             self.restForm.addCommentForm();
             self.restForm.addCommentOnSubmit(restaurants, restaurantName, self);
         });
