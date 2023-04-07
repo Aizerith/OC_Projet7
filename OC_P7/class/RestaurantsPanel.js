@@ -1,10 +1,11 @@
 import { Restaurant } from "./Restaurant.js";
 
 export class RestaurantsPanel {
-    constructor(parentElt, map, restForm) {
+    constructor(parentElt, map, commentForm, restaurantForm) {
         this.map = map;
         this.parentElt = parentElt;
-        this.restForm = restForm;
+        this.commentForm = commentForm;
+        this.restaurantForm = restaurantForm;
     }
 
     // affiche les restaurants avec les notes moyennes
@@ -93,8 +94,10 @@ export class RestaurantsPanel {
             document.getElementById("add-comment").classList.toggle('active');
             let restaurantName = e.target.getAttribute("data-restaurant");
             console.log(restaurantName)
-            self.restForm.addCommentForm();
-            self.restForm.addCommentOnSubmit(restaurants, restaurantName, self);
+            self.commentForm.addCommentForm();
+            self.commentForm.addCommentOnSubmit(restaurants, restaurantName, self);
+            self.clearRestaurant();
+            self.displayRestaurants(restaurants);
         });
     }
 
@@ -107,8 +110,8 @@ export class RestaurantsPanel {
             let lng = coord.lng;
             console.log("You clicked the map at latitude: " + lat + " and longitude: " + lng);
             document.getElementById("add-restaurant").classList.toggle('active');
-            self.restForm.addRestaurantForm();
-            self.restForm.addRestaurantOnSubmit(restaurants, coord, self);
+            self.restaurantForm.addRestaurantForm();
+            self.restaurantForm.addRestaurantOnSubmit(restaurants, coord, self);
             });
     }
 }
