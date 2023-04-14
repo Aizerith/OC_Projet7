@@ -1,1 +1,68 @@
-hello
+<div id="results"></div>
+
+<script>
+  //COORDONNES A REMPLACER PAR POSITION GEOLOCALISATION
+      const lat = 48.864389; 
+      const lng = 2.360854;
+      let div, service;
+
+      function factoryRestaurant(id, name, address, rating, coords) {
+        return {
+          id,
+          name,
+          address,
+          rating,
+          coords,
+          createNode: function () {
+            const node = document.createElement("div");
+            node.innerHTML = `
+            <article class="restaurant">
+              <h3>${this.name}</h3>
+              <p>Note : ${this.rating}
+                <br/> Id :  ${this.id}
+              </p>
+              <p>Adresse : ${this.address}</p>
+            </article>
+            `
+            //console.log(this.coords);
+            return node;
+          },
+        };
+      }
+
+      async function initialize() {
+        const center = new google.maps.LatLng(lat, lng);
+
+        div = document.getElementById("results"); // OU POURRAIT ETRE TA MAP
+
+        const request = {
+          location: center,
+          radius: "500",
+          type: ["restaurant"],
+        };
+
+        //initialiser le service google places
+        service = new google.maps.places.PlacesService(div);
+        //implementare methode nearbysearch  su service
+        service.nearbySearch(request, callback);
+      }
+
+      async function callback(results, status) {
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+          for (const resto of results) {
+            const restaurant = factoryRestaurant(
+              resto.place_id,
+              resto.name,
+              resto.vicinity,
+              resto.rating,
+              resto.geometry.viewport.getCenter()
+            );
+            //afficher le restaurant ou creer marqueur par exemple
+            div.appendChild(restaurant.createNode());
+          }
+        }
+      }
+
+      initialize() 
+
+</script>
