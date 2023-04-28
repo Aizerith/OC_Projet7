@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./test.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="result"></div>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAej4cmqUEsPkrqAR7tZBQAxxTZFfuxwE8&libraries=places"></script>
+    <!--Openstreetmap scripts-->
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+        integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin="">
+        </script>
+    <script type='text/javascript'
+        src='https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js'></script>
+    <script>
+        let map;
+        let service;
+        let infowindow;
+
+        function initialize() {
+            let center = new google.maps.LatLng(-33.8665433, 151.1956316);
+            
+            const div = document.getElementById('result');
+            let request = {
+                location: center,
+                radius: '500',
+                type: ['restaurant']
+            };
+            var request2 = {
+                placeId: 'ChIJN1t_tDeuEmsRUsoyG83frY4',
+                fields: ['reviews']
+            };
+
+            service = new google.maps.places.PlacesService(div);
+            service.nearbySearch(request, callback);
+            service.getDetails(request2, (results, status)=> {
+                console.log(results);
+            });
+        }
+
+        function callback(results, status) {
+            console.log(results);
+            if (status == google.maps.places.PlacesServiceStatus.OK) {
+                for (let i = 0; i < results.length; i++) {
+                    console.log(results[i]);
+                }
+            }
+        }
+
+        initialize();
+    </script>
+</body>
+</html>

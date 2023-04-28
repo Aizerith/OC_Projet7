@@ -55,6 +55,8 @@ input {
     flex-direction: column;
     margin-left: 5px;
     justify-content: flex-start;
+    height: 400px;
+    overflow: auto;
 }
 
 .restaurant {

@@ -42,7 +42,7 @@ export class CommentForm extends Form {
     }
 
     // ajoute le commentaire quand on envoie le formulaire
-    addCommentOnSubmit(restaurantList, restaurantName, displayRest) {
+    addCommentOnSubmit(restaurantList, restaurantName, restaurantPanel) {
         const form = document.querySelector("form.add-comment-form");
         let self = this;
         form.addEventListener('submit', e => {
@@ -55,7 +55,9 @@ export class CommentForm extends Form {
                 }
                 console.log(element.ratings)
             });
-            self.map.resetMarkers(restaurantList, displayRest);
+            self.map.resetMarkers(restaurantList, restaurantPanel);
+            restaurantPanel.clearRestaurant();
+            restaurantPanel.displayRestaurants(restaurantList);
         });
     }
 }
@@ -93,18 +95,18 @@ export class RestaurantForm extends Form{
                 `
     }
 
-    addRestaurantOnSubmit(restaurantList, coord, displayRest) {
+    addRestaurantOnSubmit(restaurantList, coord, restaurantPanel) {
         const form = document.querySelector("form.add-restaurant-form");
         let self = this;
         form.addEventListener('submit', e => {
             e.preventDefault();
             document.getElementById("add-restaurant").classList.toggle('active');
             let data = self.getFormData("form.add-restaurant-form")
-            let restaurant = new Restaurant(data.restaurantName, data.address, coord.lat, coord.lng);
+            let restaurant = new Restaurant(data.restaurantName, data.address, coord.lat, coord.lng, 0, 0);
             restaurant.addRating({"stars" : data.stars, "comment": data.comment});
             restaurantList.push(restaurant);
             console.log(restaurantList);
-            self.map.resetMarkers(restaurantList, displayRest);
+            self.map.resetMarkers(restaurantList, restaurantPanel);
         });
     }
 }

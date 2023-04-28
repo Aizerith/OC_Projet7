@@ -1,11 +1,12 @@
 import { Restaurant } from "./Restaurant.js";
 
 export class RestaurantsPanel {
-    constructor(parentElt, map, commentForm, restaurantForm) {
+    constructor(parentElt, map, commentForm, restaurantForm, app) {
         this.map = map;
         this.parentElt = parentElt;
         this.commentForm = commentForm;
         this.restaurantForm = restaurantForm;
+        this.app = app;
     }
 
     // affiche les restaurants avec les notes moyennes
@@ -13,7 +14,7 @@ export class RestaurantsPanel {
         jsonObj.forEach(element => {
             this.parentElt.innerHTML += `
             <div class="restaurant">
-                <p data-restaurant="${element.restaurantName}">${element.restaurantName}<br>Average Rating: ${this.getAverageRating(element.ratings)}</p>
+                <p data-restaurant="${element.restaurantName}">${element.restaurantName}<br>Average Rating: ${this.getAverageRating(element)}</p>
             </div>`
         });
     }
@@ -25,23 +26,56 @@ export class RestaurantsPanel {
     // affiche les commentaires sur le popup des marqueurs
     showComment(element) {
         let comments = document.createElement('div');
+        console.log("showcomment element", element);
+        console.log("showcomment element rating", element.ratings);
         comments.innerHTML = `${element.restaurantName} <br> avis : `
-        element.ratings.forEach(rating => {
-            comments.innerHTML += `${rating.stars}/5 "${rating.comment}"<br>`;
-        });
+        let commentLenght = (element.ratings.lenght > 3) ? 3 : element.ratings.lenght;
+
+        for (let i = 0; i < commentLenght; i++) {
+            console.log("element rating dans for", element.ratings, i, element.ratings[i]);
+
+            //comments.innerHTML += `${element.ratings[i].stars}/5 "${element.ratings[i].comment}"<br>`;
+        }/*
+        element.ratings.forEach((rating , i) => {
+            if (i < 3) {
+                 comments.innerHTML += `${rating.stars}/5 "${rating.comment}"<br>`;
+            }
+        });*/
         return (comments);
     }
 
+    addCommentFromApi(restaurant) {
+            let service;
+            let result = document.getElementById('google-result');
+            let request = {
+                placeId: restaurant.place_id,
+                fields: ['reviews']
+            };
+            service = new google.maps.places.PlacesService(result);
+            service.getDetails(request, (results, status)=> {
+                if (status == google.maps.places.PlacesServiceStatus.OK) {
+                    results.reviews.forEach(el => {
+                        restaurant.ratings.push({"stars": el.rating, "comment": el.text})
+                    });
+                }
+            });
+    }
+
     // calcule la note moyenne d'un restaurant
-    getAverageRating(restaurantRatings) {
+    getAverageRating(restaurant) {
         let averageRating = 0;
         let count = 0;
-        restaurantRatings.forEach(element=>{
-            averageRating += element.stars;
-            count++;
-        });
-        averageRating = averageRating / count;
-        return (averageRating);
+        if (this.app.srcType === 'localData') {
+            console.log("je suis dnas local")
+            restaurant.ratings.forEach(element => {
+                averageRating += element.stars;
+                count++;
+            });
+            averageRating = averageRating / count;
+            return (averageRating).toFixed(1);
+        } else if (this.app.srcType === 'api') {
+            return restaurant.averageRating;
+        }
     }
 
     // verifie que la note min < que note max
@@ -96,8 +130,6 @@ export class RestaurantsPanel {
             console.log(restaurantName)
             self.commentForm.addCommentForm();
             self.commentForm.addCommentOnSubmit(restaurants, restaurantName, self);
-            self.clearRestaurant();
-            self.displayRestaurants(restaurants);
         });
     }
 

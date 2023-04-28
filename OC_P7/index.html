@@ -20,18 +20,21 @@
     <h1>Avis Restaurant</h1>
     <div id="add-comment"></div>
     <div id="add-restaurant"></div>
+    <div id="google-result" style="display: none;"></div>
     <div id="filters">
         <span>min rating : </span>
-        <input type="number" id="min-rate" min="1" max="5">
+        <input type="number" id="min-rate" min="0" max="5">
         <span style="margin-left: 5px;">max rating : </span>
-        <input type="number" id="max-rate" min="1" max="5">
+        <input type="number" id="max-rate" min="0" max="5">
         <button type="submit" id="filterBtn">Valider</button>
     </div>
     <div id="map-restaurant-display">
         <div id="map"></div>
         <div id="restaurants"></div>
     </div>
-    <div id="pano-test"></div>
+    <div id="panorama"></div>
+    <!--google api-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAej4cmqUEsPkrqAR7tZBQAxxTZFfuxwE8&libraries=places"></script>
     <!--Openstreetmap scripts-->
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
         integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin="">
