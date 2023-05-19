@@ -1,46 +1,63 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projet 7</title>
-    <!-- Openstreetmap styles -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
-        integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
-    <link rel="stylesheet" type="text/css"
-        href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
-    <link rel="stylesheet" type="text/css"
-        href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
-    <!-- main styles -->
-    <link rel="stylesheet" href="./styles/style.css">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet 7</title>
+  <!-- Openstreetmap styles -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+    integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+    crossorigin=""
+  >
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css"
+  >
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"
+  >
+  <!-- main styles -->
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Raleway">
+  <link rel="stylesheet" href="./styles/style.css">
+  <script type="module" src="./scripts/main.js"></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAej4cmqUEsPkrqAR7tZBQAxxTZFfuxwE8&libraries=places&callback=initApp"
+    defer></script>
 </head>
 
 <body>
-    <h1>Avis Restaurant</h1>
-    <div id="add-comment"></div>
-    <div id="add-restaurant"></div>
-    <div id="google-result" style="display: none;"></div>
-    <div id="filters">
-        <span>min rating : </span>
+  <h1>Avis Restaurant</h1>
+  <div id="add-comment"></div>
+  <div id="add-restaurant"></div>
+  <div id="google-result" style="display: none"></div>
+  
+  <div id="map-restaurant-display">
+    <div id="map"></div>
+    <div class="restaurant-list">
+      <div id="restaurant-header">Restaurants</div>
+      <div id="filters">
+        <span>min rating </span>
         <input type="number" id="min-rate" min="0" max="5">
-        <span style="margin-left: 5px;">max rating : </span>
+        <span style="margin-left: 5px">max rating </span>
         <input type="number" id="max-rate" min="0" max="5">
-        <button type="submit" id="filterBtn">Valider</button>
+        <button type="submit" id="filterBtn">OK</button>
+      </div>
+      <div id="panorama"></div>
+      <div id="restaurants"></div>
     </div>
-    <div id="map-restaurant-display">
-        <div id="map"></div>
-        <div id="restaurants"></div>
-    </div>
-    <div id="panorama"></div>
-    <!--google api-->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAej4cmqUEsPkrqAR7tZBQAxxTZFfuxwE8&libraries=places"></script>
-    <!--Openstreetmap scripts-->
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
-        integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin="">
-        </script>
-    <script type='text/javascript'
-        src='https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js'></script>
-    <script type="module" src="./scripts/main.js"></script>
+  </div>
+  <!--google api-->
+
+  <!--Openstreetmap scripts-->
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
 </body>
+
 </html>
