@@ -35,7 +35,7 @@ export class RestaurantsPanel {
         return (comments);
     }
 
-
+    // ajoute les commentaires a partir des commentaires de l'api
     async addCommentFromApi(restaurant, popup) {
             let service;
             let result = document.getElementById('google-result');

@@ -1,40 +1,27 @@
 import { RestaurantApp } from "../class/RestaurantApp.js";
+import { getGeoStatus, getUserPos } from "./geolocation.js";
 
+// paramètre par defaut pour le local
 let userLat = 48.8737815;
 let userLong = 2.3501649;
 let srcType = 'localData';
 //let srcType = 'api';
-let zoom;
+let zoom = 13;
 
-function successPosition(position) {
-    return [position.coords.latitude, position.coords.longitude];
-}
-
-async function getUserPos() {
-    return new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(position => {
-            resolve(successPosition(position));
-        })
-    })
-}
 
 async function initApp() {
-    if (srcType === 'localData') {
-        zoom = 13;
-        let app = new RestaurantApp(userLat, userLong, srcType, zoom);
-        app.getRestaurantsList();
-    } else if (srcType === 'api') {
-        zoom = 20;
-        if (navigator.geolocation) {
-            await getUserPos().then(coords => {
-                let app = new RestaurantApp(coords[0], coords[1], srcType, zoom);
-                app.getRestaurantsList();
-            });
-        } else {
-            let app = new RestaurantApp(userLat, userLong, srcType, zoom);
-            app.getRestaurantsList();
-        };
+    // on change quelques paramètres si on utilise l'api
+    if (srcType === 'api') {
+        let hasGeo = await getGeoStatus();
+        zoom = 16;
+        if (hasGeo) {
+            const coord = await getUserPos();
+            userLat = coord[0];
+            userLong = coord[1];
+        }
     }
+    let app = new RestaurantApp(userLat, userLong, srcType, zoom);
+    app.getRestaurantsList();
 }
 
 window.initApp = initApp;
