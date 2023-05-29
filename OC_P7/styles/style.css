@@ -151,6 +151,24 @@ p {
     display: block;
 }
 
+#notice {
+    display: none;
+    padding: 20px;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    border: solid 3px red;
+    border-radius: 5px;
+    background-color: #202221;
+    color: white;
+}
+
+#notice.active {
+    display: block;
+}
+
 .modal {
     width: 95%;
     max-width: 500px;

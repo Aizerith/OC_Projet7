@@ -1,3 +1,5 @@
+import { noticeMessage } from "../scripts/geolocation.js";
+
 export class Map {
     constructor(userLat, userLong, zoom, srcType) {
         this.srcType = srcType
@@ -25,12 +27,11 @@ export class Map {
         });
         let marker = L.marker([this.userLat, this.userLong], { icon: userPosIcon }).addTo(this.restMap);
         marker.bindPopup('Votre Position');
-
     }
 
     // creer marqueur restaurant + bind image street view sur marqueur
     createMarker(restaurant, restaurantPanel) {
-        let marker = L.marker([restaurant.lat, restaurant.long]).addTo(this.restMap).on('click', e => {
+        let marker = L.marker([restaurant.lat, restaurant.long]).on('click', e => {
             document.getElementById("panorama").classList.add('active');
             document.getElementById("restaurants").classList.add('active');
             const panoPos = { lat: e.latlng.lat, lng: e.latlng.lng }
@@ -45,9 +46,8 @@ export class Map {
                 }
             );
         });
-        this.bindCommentOnMarker(marker, restaurantPanel, restaurant)
+        this.bindCommentOnMarker(marker, restaurantPanel, restaurant);
         this.markerClusters.addLayer(marker);
-
     }
 
     // ajoute les commentaires sur le popup des markers
@@ -80,6 +80,9 @@ export class Map {
             let newRestaurants = restaurants.filter(element => restaurantPanel.getAverageRating(element) >= Number(filter.min).toFixed(1)
                 && restaurantPanel.getAverageRating(element) <= Number(filter.max).toFixed(1));
             list = newRestaurants;
+            if (list.length < 1) {
+                noticeMessage("attention aucun restaurant trouvé!")
+            }
         }
         else {
             list = restaurants;
@@ -97,6 +100,6 @@ export class Map {
 
     resetMarkers(restaurantList, restaurantPanel) {
         this.clearMarkers();
-        this.initMarkers(restaurantPanel.filter, restaurantPanel, restaurantList)
+        this.initMarkers(restaurantPanel.filter, restaurantPanel, restaurantList);
     }
 }

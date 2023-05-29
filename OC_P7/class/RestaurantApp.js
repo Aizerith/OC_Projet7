@@ -60,7 +60,6 @@ export class RestaurantApp {
             restaurant.ratings = el.ratings;
             this.restaurants.push(restaurant);
         });
-
         this.initAllinstances()
     }
 
